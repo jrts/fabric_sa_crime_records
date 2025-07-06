@@ -24,7 +24,7 @@ A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture
 
 <summary>`01_bronze` directory</summary>
 
-- [`nb_01_ingest_bronze.ipynb`](./01_bronze/nb_01_ingest_bronze.ipynb): notebook pipeline to download SA crime records
+- [`nb_01_ingest_bronze.ipynb`](./01_bronze/nb_01_ingest_bronze.ipynb): notebook pipeline to download SA crime records (unused).
 - [`pl_01_ingest_bronze.json`](./01_bronze/pl_01_ingest_bronze.json): Pipeline `JSON` file to download raw data from [Data SA](https://data.sa.gov.au/data/dataset/crime-statistics), including `.csv` and `.xlsx` files.
 
 	<img src="./images/pl_01_ingest_bronze_1.png" alt="drawing" width="500"/>
@@ -80,6 +80,26 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 
 </details>
 
+<details open>
+<summary>Naming convention</summary>
+
+
+| Workspace item naming  | Format                                           |
+| ---------------------- | ------------------------------------------------ |
+| Lakehouse              | `lh_<stage_idx>_<description>`                   |
+| Notebook test unit     | `nb_<stage_idx>_<description>_tests`             |
+| Notebook               | `nb_<stage_idx>_<description>_<medallion_stage>` |
+| Directory              | `<stage_idx>_<medallion_stage>`                  |
+| Data pipeline activity | `Camel case`                                     |
+| Python class name      | `PascalCase`                                     |
+| Python function        | `snake_case`                                     |
+
+
+</details>
+
+
+</details>
+
 <details>
 <summary>Repo directory structure</summary>
 
@@ -125,7 +145,7 @@ Drill down/up to lower/upper hierarchy is implemented, however the report is not
 - [x] Pipelines ✅ 2025-07-06
 - [ ] Analytics
 	- [ ] Analysis with SA economical statistics
-	- [x] Simple Power BI ✅ 2025-07-06
+	- [x] Simple Power BI dashboard ✅ 2025-07-06
 - [ ] CI/CD
 	- [ ] Azure DevOps
 	- [ ] Fabric Deployment
