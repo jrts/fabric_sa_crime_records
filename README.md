@@ -93,6 +93,7 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 | Data pipeline activity | `Camel case`                                     |
 | Python class name      | `PascalCase`                                     |
 | Python function        | `snake_case`                                     |
+| Delta table name       | `PascalCase`                                     |
 
 
 </details>
