@@ -163,7 +163,7 @@ Drill down/up to lower/upper hierarchy is implemented, however the report is not
 	- [ ] Azure DevOps
 	- [ ] Fabric Deployment
 	- [ ] Automation
-- [ ] Linter
+- [ ] ？Linter
 - [ ] Logging
 - [ ] Security
 
