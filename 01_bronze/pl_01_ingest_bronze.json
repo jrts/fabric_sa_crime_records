@@ -1,0 +1,267 @@
+{
+    "name": "pl_01_ingest_bronze",
+    "objectId": "5099cc24-3468-45a6-8620-f4b94d6342d9",
+    "properties": {
+        "activities": [
+            {
+                "name": "Read datasets URL file",
+                "type": "Lookup",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                            "type": "LakehouseReadSettings",
+                            "recursive": true,
+                            "enablePartitionDiscovery": false
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextReadSettings"
+                        }
+                    },
+                    "firstRowOnly": false,
+                    "datasetSettings": {
+                        "annotations": [],
+                        "linkedService": {
+                            "name": "lh_sa_crime",
+                            "properties": {
+                                "annotations": [],
+                                "type": "Lakehouse",
+                                "typeProperties": {
+                                    "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56",
+                                    "artifactId": "1f48511b-66fb-41ae-8e45-0896749e0920",
+                                    "rootFolder": "Files"
+                                }
+                            }
+                        },
+                        "type": "DelimitedText",
+                        "typeProperties": {
+                            "location": {
+                                "type": "LakehouseLocation",
+                                "fileName": "sa_crime_data_urls.csv",
+                                "folderPath": "data_source"
+                            },
+                            "columnDelimiter": ",",
+                            "escapeChar": "\\",
+                            "firstRowAsHeader": true,
+                            "quoteChar": "\""
+                        },
+                        "schema": []
+                    }
+                }
+            },
+            {
+                "name": "Download for each URL",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "Read datasets URL file",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "items": {
+                        "value": "@activity('Read datasets URL file').output.value",
+                        "type": "Expression"
+                    },
+                    "activities": [
+                        {
+                            "name": "IsCsvDataset",
+                            "type": "IfCondition",
+                            "dependsOn": [],
+                            "typeProperties": {
+                                "expression": {
+                                    "value": "@endswith(item().url, '.csv')",
+                                    "type": "Expression"
+                                },
+                                "ifFalseActivities": [
+                                    {
+                                        "name": "LoadOtherDataset",
+                                        "type": "Copy",
+                                        "dependsOn": [],
+                                        "policy": {
+                                            "timeout": "0.12:00:00",
+                                            "retry": 0,
+                                            "retryIntervalInSeconds": 30,
+                                            "secureOutput": false,
+                                            "secureInput": false
+                                        },
+                                        "typeProperties": {
+                                            "source": {
+                                                "type": "BinarySource",
+                                                "storeSettings": {
+                                                    "type": "HttpReadSettings",
+                                                    "requestMethod": "GET"
+                                                },
+                                                "formatSettings": {
+                                                    "type": "BinaryReadSettings"
+                                                },
+                                                "datasetSettings": {
+                                                    "annotations": [],
+                                                    "type": "Binary",
+                                                    "typeProperties": {
+                                                        "location": {
+                                                            "type": "HttpServerLocation",
+                                                            "relativeUrl": {
+                                                                "value": "@item().url",
+                                                                "type": "Expression"
+                                                            }
+                                                        }
+                                                    },
+                                                    "externalReferences": {
+                                                        "connection": "7a29395f-ed08-4a37-b492-629ee0044b8c"
+                                                    }
+                                                }
+                                            },
+                                            "sink": {
+                                                "type": "BinarySink",
+                                                "storeSettings": {
+                                                    "type": "LakehouseWriteSettings"
+                                                },
+                                                "datasetSettings": {
+                                                    "annotations": [],
+                                                    "linkedService": {
+                                                        "name": "lh_sa_crime",
+                                                        "properties": {
+                                                            "annotations": [],
+                                                            "type": "Lakehouse",
+                                                            "typeProperties": {
+                                                                "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56",
+                                                                "artifactId": "1f48511b-66fb-41ae-8e45-0896749e0920",
+                                                                "rootFolder": "Files"
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "Binary",
+                                                    "typeProperties": {
+                                                        "location": {
+                                                            "type": "LakehouseLocation",
+                                                            "fileName": {
+                                                                "value": "@last(split(item().url, '/'))",
+                                                                "type": "Expression"
+                                                            },
+                                                            "folderPath": "sa_crime_datasets"
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "enableStaging": false
+                                        }
+                                    }
+                                ],
+                                "ifTrueActivities": [
+                                    {
+                                        "name": "LoadCsvDataset",
+                                        "type": "Copy",
+                                        "dependsOn": [],
+                                        "policy": {
+                                            "timeout": "0.12:00:00",
+                                            "retry": 0,
+                                            "retryIntervalInSeconds": 30,
+                                            "secureOutput": false,
+                                            "secureInput": false
+                                        },
+                                        "typeProperties": {
+                                            "source": {
+                                                "type": "DelimitedTextSource",
+                                                "storeSettings": {
+                                                    "type": "HttpReadSettings",
+                                                    "requestMethod": "GET"
+                                                },
+                                                "formatSettings": {
+                                                    "type": "DelimitedTextReadSettings"
+                                                },
+                                                "datasetSettings": {
+                                                    "annotations": [],
+                                                    "type": "DelimitedText",
+                                                    "typeProperties": {
+                                                        "location": {
+                                                            "type": "HttpServerLocation",
+                                                            "relativeUrl": {
+                                                                "value": "@item().url",
+                                                                "type": "Expression"
+                                                            }
+                                                        },
+                                                        "columnDelimiter": ",",
+                                                        "escapeChar": "\\",
+                                                        "firstRowAsHeader": true,
+                                                        "quoteChar": "\""
+                                                    },
+                                                    "schema": [],
+                                                    "externalReferences": {
+                                                        "connection": "7a29395f-ed08-4a37-b492-629ee0044b8c"
+                                                    }
+                                                }
+                                            },
+                                            "sink": {
+                                                "type": "DelimitedTextSink",
+                                                "storeSettings": {
+                                                    "type": "LakehouseWriteSettings"
+                                                },
+                                                "formatSettings": {
+                                                    "type": "DelimitedTextWriteSettings",
+                                                    "fileExtension": ".txt"
+                                                },
+                                                "datasetSettings": {
+                                                    "annotations": [],
+                                                    "linkedService": {
+                                                        "name": "lh_sa_crime",
+                                                        "properties": {
+                                                            "annotations": [],
+                                                            "type": "Lakehouse",
+                                                            "typeProperties": {
+                                                                "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56",
+                                                                "artifactId": "1f48511b-66fb-41ae-8e45-0896749e0920",
+                                                                "rootFolder": "Files"
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "DelimitedText",
+                                                    "typeProperties": {
+                                                        "location": {
+                                                            "type": "LakehouseLocation",
+                                                            "fileName": {
+                                                                "value": "@last(split(item().url, '/'))",
+                                                                "type": "Expression"
+                                                            },
+                                                            "folderPath": "sa_crime_datasets"
+                                                        },
+                                                        "columnDelimiter": ",",
+                                                        "escapeChar": "\\",
+                                                        "firstRowAsHeader": true,
+                                                        "quoteChar": "\""
+                                                    },
+                                                    "schema": []
+                                                }
+                                            },
+                                            "enableStaging": false,
+                                            "translator": {
+                                                "type": "TabularTranslator",
+                                                "typeConversion": true,
+                                                "typeConversionSettings": {
+                                                    "allowDataTruncation": true,
+                                                    "treatBooleanAsNumber": false
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "1011b96f-0346-4bf6-b320-7735e808524e",
+        "lastPublishTime": "2025-07-05T09:35:51Z"
+    }
+}

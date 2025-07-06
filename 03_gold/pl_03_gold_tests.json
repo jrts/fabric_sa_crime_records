@@ -1,0 +1,72 @@
+{
+    "name": "pl_03_gold_tests",
+    "objectId": "0307afac-8fdd-4888-9f01-92f19fe8ae8b",
+    "properties": {
+        "activities": [
+            {
+                "name": "Test DimDateWrangler",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "77d17796-039e-4a29-89fb-2b378854b096",
+                    "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56"
+                }
+            },
+            {
+                "name": "Test DimDescWrangler",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Test DimDateWrangler",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "c5404627-3294-4ca9-89d2-98b6b65c0061",
+                    "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56"
+                }
+            },
+            {
+                "name": "Test FactRecordWrangler",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Test DimDescWrangler",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "25918d61-9eb9-43f3-9e06-bd863476206e",
+                    "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56"
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "1011b96f-0346-4bf6-b320-7735e808524e",
+        "lastPublishTime": "2025-07-06T03:53:11Z"
+    }
+}

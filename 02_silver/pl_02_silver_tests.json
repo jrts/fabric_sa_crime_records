@@ -1,0 +1,26 @@
+{
+    "name": "pl_02_silver_tests",
+    "objectId": "a267db37-371c-42fe-8d17-c30067e0cb19",
+    "properties": {
+        "activities": [
+            {
+                "name": "Test CrimeRecordWrangler",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "3917c605-ac71-4d36-9d33-38e3056b9758",
+                    "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56"
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "1011b96f-0346-4bf6-b320-7735e808524e",
+        "lastPublishTime": "2025-07-06T03:53:26Z"
+    }
+}

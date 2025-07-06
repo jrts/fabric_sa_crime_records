@@ -1,0 +1,115 @@
+{
+    "name": "pl_00_medallion",
+    "objectId": "77e924ce-2f9d-4bc9-82ee-d4eb14179710",
+    "properties": {
+        "activities": [
+            {
+                "name": "Invoke Bronze Pipeline",
+                "type": "ExecutePipeline",
+                "dependsOn": [],
+                "policy": {
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "5099cc24-3468-45a6-8620-f4b94d6342d9",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "Run Silver",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Test Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "c1f5622f-c95b-43fd-913e-0c8fc50d6b09",
+                    "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56"
+                }
+            },
+            {
+                "name": "Test Silver",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "Invoke Bronze Pipeline",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "a267db37-371c-42fe-8d17-c30067e0cb19",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "Test Gold",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "Run Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "0307afac-8fdd-4888-9f01-92f19fe8ae8b",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "Run Gold",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Test Gold",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "83351150-04cb-4052-9159-a74c69acb55f",
+                    "workspaceId": "d9b10c93-1a77-400b-9b7a-9b49740a2c56"
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "1011b96f-0346-4bf6-b320-7735e808524e",
+        "lastPublishTime": "2025-07-06T03:55:45Z"
+    }
+}
