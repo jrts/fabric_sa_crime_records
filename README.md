@@ -11,34 +11,76 @@ A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture
 
 <details open>
 
+<summary>`pl_00_medallion.json` file</summary>
+
+- [`pl_00_medallion.json`](./pl_00_medallion.json): The complete medallion pipeline, including the following pipelines for each stage, and Notebook activities.
+
+	<img src="./images/pl_00_medallion.png" alt="drawing" width="1000"/>
+
+</details>
+
+
+<details open>
+
 <summary>`01_bronze` directory</summary>
 
 - [`nb_01_ingest_bronze.ipynb`](./01_bronze/nb_01_ingest_bronze.ipynb): notebook pipeline to download SA crime records
 - [`pl_01_ingest_bronze.json`](./01_bronze/pl_01_ingest_bronze.json): Pipeline `JSON` file to download raw data from [Data SA](https://data.sa.gov.au/data/dataset/crime-statistics), including `.csv` and `.xlsx` files.
 
+	<img src="./images/pl_01_ingest_bronze_1.png" alt="drawing" width="500"/>
+
+	`ForEach` activity contains `Copy Data` activities to fetch `.csv` (delimited text format) and `.xlsx` (binary file) files given the datasets urls ([`datasource/sa_crime_data_urls.csv`](./data_source/sa_crime_data_urls.csv)).
+
 </details>
 
-<details>
+<details open>
 <summary>`02_silver` directory</summary>
+
+The silver stage that ingests 10+ crime record files into the lakehouse, along with data cleansing.
 
 - [`nb_02_sa_crime_record_wrangler.ipynb`](./02_silver/nb_02_sa_crime_record_wrangler.ipynb): class to clease and ingest SA crime records data
 - [`nb_02_sa_crime_record_wrangler_tests.ipynb`](./02_silver/nb_02_sa_crime_record_wrangler_tests.ipynb): test units to test the wranger class.
 
-	Call `%run` to import another notebook file, i.e. `SACrimeRecordWrangler` class.
+	Call `%run` to import the classes from another notebook file, i.e. `SACrimeRecordWrangler` class.
 
 	```
 	%run nb_02_sa_crime_record_wrangler
 	```
 
-- [`nb_02_cleanse_silver.ipynb`](./02_silver/nb_02_cleanse_silver.ipynb): notebook to execute the ingestion and cleansing codes (two `Lakehouse`s are created, one for testing and another for dev env)
+- [`nb_02_cleanse_silver.ipynb`](./02_silver/nb_02_cleanse_silver.ipynb): notebook to execute the ingestion and cleansing codes (two `Lakehouse`s are created, one for testing (`lh_sa_crime_test`) and another for actual data (`lh_sa_crime`))
+- [`pl_02_silver_tests.json`](./02_silver/pl_02_silver_tests.json): date pipeline file for the silver stage:
+
+	<img src="./images/pl_02_silver_tests.png" alt="drawing" width="220"/>
+
+</details>
+
+<details open>
+<summary>`03_gold` directory</summary>
+
+The golden stage that transforms crime records (fact table), date (dimenstion) and offence description (dimension) tables for further analysis. Similar to the silver stage, `*_tests.ipynb` notebooks test the wrangler classes.
+
+	For example:
+
+	```
+	%run nb_03_dim_date_wrangler
+	
+	dim_date_gold_df = DimDateWrangler.extract_silver_df(silver_df)
+	DimDateWrangler.create_delta_table(spark, date_gold_table_name)
+
+	dim_date_table = DeltaTable.forName(spark, date_gold_table_name)
+	DimDateWrangler.upsert_delta_table(dim_date_table, dim_date_gold_df)
+	```
+
+- [`nb_03_crime_record_gold.ipynb`](./03_gold/nb_03_crime_record_gold.ipynb): calls the wranglers in order (`dim_date`, `dim_desc`, and `fact_crime_record`).
+- [`pl_03_gold_tests.json`](./02_silver/pl_03_gold_tests.json): date pipeline file for the gold stage:
+
+	<img src="./images/pl_03_gold_tests.png" alt="drawing" width="700"/>
+
 
 </details>
 
 <details>
-
-<summary>`pl_00_medallion.json` file</summary>
-
-<summary>Project structure</summary>
+<summary>Repo directory structure</summary>
 
 ```
 fabric_sa_crime_records
@@ -66,7 +108,11 @@ fabric_sa_crime_records
 
 </details>
 
+## Simple Power BI dashboard regarding the gold sementic model:
 
+Drill down/up to lower/upper hierarchy is implemented, however the report is not publishable due to the permission issue.
+
+<img src="./images/power_bi_dashboard.png" alt="drawing" width="1000"/>
 
 ## Todos:
 
@@ -83,6 +129,7 @@ fabric_sa_crime_records
 	- [ ] Azure DevOps
 	- [ ] Fabric Deployment
 	- [ ] Automation
+- [ ] Linter
 - [ ] Logging
 - [ ] Security
 
