@@ -91,6 +91,10 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 
 	<img src="./images/pl_03_gold_tests.png" alt="drawing" width="700"/>
 
+- The transformed sementic model:
+
+	<img src="./images/gold_sementic_model.png" alt="drawing" width="700"/>
+
 </details>
 
  <br>
