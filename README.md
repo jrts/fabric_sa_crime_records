@@ -19,19 +19,22 @@ A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture
 
 </details>
 
+ <br>
 
 <details open>
 
 <summary>`01_bronze` directory</summary>
 
-- [`nb_01_ingest_bronze.ipynb`](./01_bronze/nb_01_ingest_bronze.ipynb): notebook pipeline to download SA crime records (unused).
-- [`pl_01_ingest_bronze.json`](./01_bronze/pl_01_ingest_bronze.json): Pipeline `JSON` file to download raw data from [Data SA](https://data.sa.gov.au/data/dataset/crime-statistics), including `.csv` and `.xlsx` files.
+- [`nb_01_ingest_bronze.ipynb`](./01_bronze/nb_01_ingest_bronze.ipynb): a notebook to download SA crime records (unused).
+- [`pl_01_ingest_bronze.json`](./01_bronze/pl_01_ingest_bronze.json): a `JSON` pipeline file to download raw data from [Data SA](https://data.sa.gov.au/data/dataset/crime-statistics), including `.csv` and `.xlsx` files.
 
 	<img src="./images/pl_01_ingest_bronze_1.png" alt="drawing" width="500"/>
 
 	`ForEach` activity contains `Copy Data` activities to fetch `.csv` (delimited text format) and `.xlsx` (binary file) files given the datasets urls ([`datasource/sa_crime_data_urls.csv`](./data_source/sa_crime_data_urls.csv)).
 
 </details>
+
+ <br>
 
 <details open>
 <summary>`02_silver` directory</summary>
@@ -54,10 +57,21 @@ The silver stage that ingests 10+ crime record files into the lakehouse, along w
 
 </details>
 
+ <br>
+
 <details open>
 <summary>`03_gold` directory</summary>
 
-The golden stage that transforms crime records (fact table), date (dimenstion) and offence description (dimension) tables for further analysis. Similar to the silver stage, `*_tests.ipynb` notebooks test the wrangler classes.
+The golden stage that transforms crime records (fact table), date (dimenstion) and offence description (dimension) tables for further analysis. Similar to the silver stage, `*_tests.ipynb` notebooks test the wrangler classes (`*_wrangler.ipynb`):
+
+- [`nb_03_dim_date_wrangler.ipynb`](./03_gold/nb_03_dim_date_wrangler.ipynb)
+- [`nb_03_dim_date_wrangler_tests.ipynb`](./03_gold/nb_03_dim_date_wrangler_tests.ipynb)
+- [`nb_03_dim_desc_wrangler.ipynb`](./03_gold/nb_03_dim_desc_wrangler.ipynb)
+- [`nb_03_dim_desc_wrangler_tests.ipynb`](./03_gold/nb_03_dim_desc_wrangler_tests.ipynb)
+- [`nb_03_fact_record_wrangler.ipynb`](./03_gold/nb_03_fact_record_wrangler.ipynb)
+- [`nb_03_fact_record_wrangler_tests.ipynb`](./03_gold/nb_03_fact_record_wrangler_tests.ipynb)
+
+ <br>
 
 - [`nb_03_crime_record_gold.ipynb`](./03_gold/nb_03_crime_record_gold.ipynb): calls the wranglers in order (`dim_date`, `dim_desc`, and `fact_crime_record`).
 
@@ -77,12 +91,12 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 
 	<img src="./images/pl_03_gold_tests.png" alt="drawing" width="700"/>
 
-
 </details>
+
+ <br>
 
 <details open>
 <summary>Naming convention</summary>
-
 
 | Workspace item naming  | Format                                           |
 | ---------------------- | ------------------------------------------------ |
@@ -95,11 +109,9 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 | Python function        | `snake_case`                                     |
 | Delta table name       | `PascalCase`                                     |
 
-
 </details>
 
-
-</details>
+ <br>
 
 <details>
 <summary>Repo directory structure</summary>
