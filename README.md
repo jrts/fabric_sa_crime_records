@@ -3,7 +3,7 @@
 A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture/data-guide/relational-data/etl) (extract, transform and load) process utilizing [Medallion architecture](https://learn.microsoft.com/en-us/azure/databricks/lakehouse/medallion) on Microsoft Fabric platform. The features include:
 
 - Test-driven development (on silver and gold layers using Notebooks)
-- Use [South Australia crime statistics](https://data.sa.gov.au/data/dataset/crime-statistics)
+- Use [South Australia crime statistics](https://data.sa.gov.au/data/dataset/crime-statistics) (daily records, July 2010 to March 2025)
 - Simple Power BI dashboard demo
 - TODO: Analysis with SA economical statistics, etc
 
@@ -13,7 +13,7 @@ A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture
 
 <summary>`pl_00_medallion.json` file</summary>
 
-- [`pl_00_medallion.json`](./pl_00_medallion.json): The complete medallion pipeline, including the following pipelines for each stage, and Notebook activities.
+- [`pl_00_medallion.json`](./pl_00_medallion.json): The complete medallion pipeline, including the pipelines and Notebook activities for each stage (bronze, test silver, silver, test gold and gold).
 
 	<img src="./images/pl_00_medallion.png" alt="drawing" width="1000"/>
 
@@ -59,11 +59,13 @@ The silver stage that ingests 10+ crime record files into the lakehouse, along w
 
 The golden stage that transforms crime records (fact table), date (dimenstion) and offence description (dimension) tables for further analysis. Similar to the silver stage, `*_tests.ipynb` notebooks test the wrangler classes.
 
-	For example:
+- [`nb_03_crime_record_gold.ipynb`](./03_gold/nb_03_crime_record_gold.ipynb): calls the wranglers in order (`dim_date`, `dim_desc`, and `fact_crime_record`).
 
-	```
+	For example, in `nb_03_crime_record_gold.ipynb`:
+
+	```python
 	%run nb_03_dim_date_wrangler
-	
+		
 	dim_date_gold_df = DimDateWrangler.extract_silver_df(silver_df)
 	DimDateWrangler.create_delta_table(spark, date_gold_table_name)
 
@@ -71,7 +73,6 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 	DimDateWrangler.upsert_delta_table(dim_date_table, dim_date_gold_df)
 	```
 
-- [`nb_03_crime_record_gold.ipynb`](./03_gold/nb_03_crime_record_gold.ipynb): calls the wranglers in order (`dim_date`, `dim_desc`, and `fact_crime_record`).
 - [`pl_03_gold_tests.json`](./02_silver/pl_03_gold_tests.json): date pipeline file for the gold stage:
 
 	<img src="./images/pl_03_gold_tests.png" alt="drawing" width="700"/>
