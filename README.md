@@ -161,7 +161,7 @@ Drill down/up to lower/upper hierarchy is implemented, however the report is not
 	- [x] Unit tests ✅ 2025-07-06
 - [x] Pipelines ✅ 2025-07-06
 - [ ] Analytics
-	- [ ] Analysis with SA economical statistics
+	- [ ] Analysis with SA economic indicators
 	- [x] Simple Power BI dashboard ✅ 2025-07-06
 - [ ] CI/CD
 	- [ ] Azure DevOps
