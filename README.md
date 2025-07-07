@@ -5,7 +5,7 @@ A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture
 - Test-driven development (on silver and gold layers using Notebooks)
 - Use [South Australia crime statistics](https://data.sa.gov.au/data/dataset/crime-statistics) (daily records, July 2010 to March 2025)
 - Simple Power BI dashboard demo
-- TODO: Analysis with SA economical statistics, etc
+- Analysis with SA economic data
 
 ## Project details:
 
@@ -19,7 +19,7 @@ A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture
 
 </details>
 
- <br>
+<br>
 
 <details open>
 
@@ -34,7 +34,7 @@ A demo showing simple [ETL](https://learn.microsoft.com/en-us/azure/architecture
 
 </details>
 
- <br>
+<br>
 
 <details open>
 <summary>`02_silver` directory</summary>
@@ -57,7 +57,7 @@ The silver stage that ingests 10+ crime record files into the lakehouse, along w
 
 </details>
 
- <br>
+<br>
 
 <details open>
 <summary>`03_gold` directory</summary>
@@ -71,7 +71,7 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 - [`nb_03_fact_record_wrangler.ipynb`](./03_gold/nb_03_fact_record_wrangler.ipynb)
 - [`nb_03_fact_record_wrangler_tests.ipynb`](./03_gold/nb_03_fact_record_wrangler_tests.ipynb)
 
- <br>
+<br>
 
 - [`nb_03_crime_record_gold.ipynb`](./03_gold/nb_03_crime_record_gold.ipynb): calls the wranglers in order (`dim_date`, `dim_desc`, and `fact_crime_record`).
 
@@ -97,7 +97,20 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 
 </details>
 
- <br>
+<br>
+
+<details open>
+
+<summary>`04_analytics` directory</summary>
+
+To find the relationships between the number of crime records and a number of economic indicators, e.g. CPI (Consumer Price Index), Median Housing Price, GRP (Gross Regional Product), Australian Cash Rate Target (please check the [next section](#analysis-with-sa-economic-indicators)).
+
+- [`sa_economic_data_loader.ipynb`](./04_analytics/sa_economic_data_loader.ipynb): the notebook file to load the economic data.
+- ['sa_crime_record_economic_indicator.ipynb'](./04_analytics/sa_crime_record_economic_indicator.ipynb): the notebook that includes the analytics.
+
+</details>
+
+<br>
 
 <details open>
 <summary>Naming convention</summary>
@@ -115,7 +128,7 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 
 </details>
 
- <br>
+<br>
 
 <details>
 <summary>Repo directory structure</summary>
@@ -139,6 +152,9 @@ fabric_sa_crime_records
 │   ├── nb_03_fact_record_wrangler_tests.ipynb
 │   ├── nb_03_fact_record_wrangler.ipynb
 │   └── pl_03_gold_tests.json
+├── 04_analytics
+│   ├── sa_crime_record_economic_indicator.ipynb
+│   └── sa_economic_data_loader.ipynb
 ├── data_source
 │   └── sa_crime_data_urls.csv
 └── pl_00_medallion.json
@@ -152,17 +168,49 @@ Drill down/up to lower/upper hierarchy is implemented, however the report is not
 
 <img src="./images/power_bi_dashboard.png" alt="drawing" width="1000"/>
 
+## Analysis with SA economic indicators
+
+More data were refered to find the relationships between the number of crime records and these economic data:
+
+| Dataset                                     | Data                                                            | Unit     | Period Start | Period End | Frequency | Availability                                                                                                                                  |
+| ------------------------------------------- | --------------------------------------------------------------- | -------- | ------------ | ---------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| SA Crime Record                             | - Number of Records                                             | record   | July 2010    | March 2025 | Monthly   | [Data SA](https://data.sa.gov.au/data/dataset/crime-statistics)                                                                               |
+| Median Price of Established House Transfers | - Adelaide Price<br>- Rest of SA Price                          | $1000    | March 2002   | March 2025 | Quarterly | [Australian Bureau of Statistics](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/total-value-dwellings/latest-release) |
+| Australian Cash Rate Target                 | - CRT                                                           | %        | Aug 1990     | May 2025   | Monthly   | [Reserve Bank of Australia](https://www.rba.gov.au/statistics/cash-rate/)                                                                     |
+| Consumer Price Index (CPI)                  | - Adelaide<br>- Australia                                       | %        | April 2001   | April 2025 | Quarterly | [City of Adelaide](https://economy.id.com.au/adelaide/consumer-price-index)                                                                   |
+| Unemployment Rate                           | - City of Adelaide<br>- Greater Adelaide<br>- SA<br>- Australia | %        | Dec 2010     | Dec 2024   | Quarterly | [City of Adelaide](https://economy.id.com.au/adelaide/unemployment)                                                                           |
+| SA Gross Regional Product                   | - GRP                                                           | $million | 2001         | 2024       | Annual    | [City of Adelaide](https://economy.id.com.au/adelaide/gross-regional-product)                                                                 |
+
+
+<details open>
+
+<summary>Highlights</summary>
+
+Analysis of Correlations Between Crime, Cash Rate Target, and Unemployment Rate in Australia
+It is observed that there is a moderate positive correlation (Pearson's correlation) between the number of criminals and the cash rate target (CRT). Additionally, there is a strong negative correlation between the number of criminals and the unemployment rate in Australia, which is somewhat surprising.
+
+- The increase in crime records is moderately associated with a rise in the cash rate target.
+
+- The surge in the number of criminals is linked to a decrease in the unemployment rate, potentially influenced by factors such as income inequality (?).
+
+- Notably, the COVID-19 lockdowns caused a significant rise in the unemployment rate, which began to ease as lockdown restrictions were relaxed.
+
+<img src="./images/nb_04_no_vs_crt.jpeg" alt="drawing" width="300"/> <img src="./images/nb_04_no_vs_unempl.jpeg" alt="drawing" width="306.7"/>
+
+
+</details>
+
 ## Todos:
 
-- [x] Medallion ✅ 2025-07-06
-	- [x] Bronze ✅ 2025-07-05
-	- [x] Silver ✅ 2025-07-05
-	- [x] Gold ✅ 2025-07-06
-	- [x] Unit tests ✅ 2025-07-06
-- [x] Pipelines ✅ 2025-07-06
-- [ ] Analytics
-	- [ ] Analysis with SA economic indicators
-	- [x] Simple Power BI dashboard ✅ 2025-07-06
+- [x] Medallion
+	- [x] Bronze
+	- [x] Silver
+	- [x] Gold
+	- [x] Unit tests
+- [x] Pipelines
+- [x] Analytics
+	- [x] Analysis with SA economic indicators
+	- [x] Simple Power BI dashboard
 - [ ] CI/CD
 	- [ ] Azure DevOps
 	- [ ] Fabric Deployment
