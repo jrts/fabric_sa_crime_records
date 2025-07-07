@@ -195,7 +195,7 @@ It is observed that there is a moderate positive correlation (Pearson's correlat
 
 - Notably, the COVID-19 lockdowns caused a significant rise in the unemployment rate, which began to ease as lockdown restrictions were relaxed.
 
-<img src="./images/nb_04_no_vs_crt.jpeg" alt="drawing" width="300"/> <img src="./images/nb_04_no_vs_unempl.jpeg" alt="drawing" width="306.7"/>
+<img src="./images/nb_04_no_vs_crt.jpeg" alt="drawing" width="350"/> <img src="./images/nb_04_no_vs_unempl.jpeg" alt="drawing" width="357.7"/>
 
 
 </details>
