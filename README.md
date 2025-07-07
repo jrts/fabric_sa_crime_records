@@ -106,7 +106,7 @@ The golden stage that transforms crime records (fact table), date (dimenstion) a
 To find the relationships between the number of crime records and a number of economic indicators, e.g. CPI (Consumer Price Index), Median Housing Price, GRP (Gross Regional Product), Australian Cash Rate Target (please check the [next section](#analysis-with-sa-economic-indicators)).
 
 - [`sa_economic_data_loader.ipynb`](./04_analytics/sa_economic_data_loader.ipynb): the notebook file to load the economic data.
-- ['sa_crime_record_economic_indicator.ipynb'](./04_analytics/sa_crime_record_economic_indicator.ipynb): the notebook that includes the analytics.
+- [`sa_crime_record_economic_indicator.ipynb`](./04_analytics/sa_crime_record_economic_indicator.ipynb): the notebook that includes the analytics.
 
 </details>
 
@@ -186,7 +186,7 @@ More data were refered to find the relationships between the number of crime rec
 
 <summary>Highlights</summary>
 
-Analysis of Correlations Between Crime, Cash Rate Target, and Unemployment Rate in Australia
+Analysis of Correlations Between Crime, Cash Rate Target, and Unemployment Rate in Australia.
 It is observed that there is a moderate positive correlation (Pearson's correlation) between the number of criminals and the cash rate target (CRT). Additionally, there is a strong negative correlation between the number of criminals and the unemployment rate in Australia, which is somewhat surprising.
 
 - The increase in crime records is moderately associated with a rise in the cash rate target.
@@ -197,6 +197,7 @@ It is observed that there is a moderate positive correlation (Pearson's correlat
 
 <img src="./images/nb_04_no_vs_crt.jpeg" alt="drawing" width="350"/> <img src="./images/nb_04_no_vs_unempl.jpeg" alt="drawing" width="357.7"/>
 
+Check [`sa_crime_record_economic_indicator.ipynb`](./04_analytics/sa_crime_record_economic_indicator.ipynb) for implementation.
 
 </details>
 
@@ -225,3 +226,6 @@ It is observed that there is a moderate positive correlation (Pearson's correlat
 - [Microsoft Fabric](https://www.microsoft.com/en-us/microsoft-fabric)
 - [Fabric Unit Test](https://www.youtube.com/watch?v=Y5f8T_lf77o)
 - [Data SA (South Australian Government Data Directory)](https://data.sa.gov.au/data/dataset/crime-statistics)
+- [Reserve Bank of Australia](https://www.rba.gov.au/statistics/cash-rate/)
+- [Australian Bureau of Statistics](https://www.abs.gov.au/statistics/economy/)
+- [City of Adelaide](https://economy.id.com.au/adelaide/)
